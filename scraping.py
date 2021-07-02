@@ -22,6 +22,10 @@ def scrape_all():
       "last_modified": dt.datetime.now()
     }
     
+    # Stop webdriver and return data
+    browser.quit()
+    return data
+    
 #executable_path = {'executable_path':'C:\\Users\shail\.wdm\drivers\chromedriver\win32\91.0.4472.101\chromedriver.exe'}
 
 
@@ -97,22 +101,9 @@ def mars_facts():
         #Putting back df into html
         return df.to_html()
         
-
-
-
-
-
-browser.quit
-
-
-
-
-
-
-
-
-browser.quit()
-
+if __name__ == "__main__":
+    # If running as script, print scraped data
+    print(scrape_all())
 
 
 

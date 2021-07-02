@@ -20,11 +20,12 @@ def index():
 #new webpage which will display the scrapped data on the click of a button 
 @app.route("/scrape")
 def scrape():
-   mars = mongo.db.mars
-   mars_data = scraping.scrape_all()
-   mars.update({}, mars_data, upsert=True)
+   mars = mongo.db.mars  #variable that points to our db
+   mars_data = scraping.scrape_all()  #variable to hold newly scraped data
+   mars.update({}, mars_data, upsert=True)  #update db using new data
    return redirect('/', code=302)
 
 #tell flask application to run
 if __name__ == "__main__":
+   app.debug = True
    app.run()
