@@ -92,14 +92,14 @@ def featured_image(browser):
 def mars_facts():
     try:
         # #Get the facts table from https://galaxyfacts-mars.com/
-        df = pd.read_html('https://galaxyfacts-mars.com/')[0]
+        df = pd.read_html("https://galaxyfacts-mars.com/")[0]
     except BaseException:
         return None
         df.columns=['description', 'Mars', 'Earth']
         df.set_index('description', inplace=True)
-        #df
+        df
         #Putting back df into html
-        return df.to_html()
+        return df.to_html(classes="table table-striped")
         
 if __name__ == "__main__":
     # If running as script, print scraped data
