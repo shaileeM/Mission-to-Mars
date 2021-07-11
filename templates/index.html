@@ -38,10 +38,32 @@
             <!-- Mars Facts -->
             <div class="col-md-4">
                 <div class="row" id="mars-facts">
-                    <h4>Mars Facts</h4>{{mars.facts|safe}}
+                    <h4>Mars Facts!!</h4>{{mars.facts|safe}}
                 </div>
             </div>
         </div>
+
+
+         <!-- Section for Mars Hemispheres -->
+        <div class="row" id="mars-hemispheres">
+        <div class="page-header">
+          <h2 class="text-center">Mars Hemispheres</h2>
+        </div>
+
+        {% for hemisphere in mars.hemis_url_title %}
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <img src="{{hemisphere.img_url | default('static/images/error.png', true)}}" alt="...">
+            <div class="caption">
+              <h3>{{hemisphere.title}}</h3>
+              <h3>{{hemisphere.url}}</h3>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+
     </div>
  </body>
  </html>

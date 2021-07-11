@@ -13,13 +13,17 @@ def scrape_all():
     browser = Browser('chrome', **executable_path, headless=True)
     
     news_title, news_paragraph = mars_news(browser)
+    hemis_url_title=hemis_data(browser)
     # Run all scraping functions and store results in dictionary
     data = {
       "news_title": news_title,
       "news_paragraph": news_paragraph,
       "featured_image": featured_image(browser),
       "facts": mars_facts(),
-      "last_modified": dt.datetime.now()
+      "last_modified": dt.datetime.now(),
+      "hemis_url_title":hemis_url_title
+     
+     
     }
     
     # Stop webdriver and return data
@@ -91,15 +95,63 @@ def featured_image(browser):
 
 def mars_facts():
     try:
-        # #Get the facts table from https://galaxyfacts-mars.com/
-        df = pd.read_html("https://galaxyfacts-mars.com/")[0]
+        #Get the facts table from https://galaxyfacts-mars.com/
+        df = pd.read_html("https://data-class-mars-facts.s3.amazonaws.com/Mars_Facts/index.html")[0]
     except BaseException:
         return None
-        df.columns=['description', 'Mars', 'Earth']
-        df.set_index('description', inplace=True)
-        df
-        #Putting back df into html
-        return df.to_html(classes="table table-striped")
+    df.columns=['description', 'Mars', 'Earth']
+    df.set_index('description', inplace=True)
+    df
+    #Putting back df into html
+    return df.to_html(classes="table table-striped")
+
+def hemis_data(browser):
+    #hemisphere links and titles from 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars/'
+    url ='https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars/'
+    browser.visit(url)
+    html=browser.html
+    hemis_soup=soup(html,'html.parser')
+    
+    #list to hold image links and titles
+    hemisphere_image_urls =[]
+    result=hemis_soup.find_all("div",class_="item")
+    
+    for r in result:
+        result_dict={}
+        find_div=r.find("div",class_="description")
+        #print(find_div)
+        title=find_div.find('a').text
+        #print(title)
+        find_button=r.find('a',href=True)
+        
+        #print(find_button)
+        link=find_button['href']
+    #     link=link.rstrip(".html")
+        #print(link)
+        static_link="https://astrogeology.usgs.gov/"
+        final_link=static_link+link
+        #print(final_link)
+        browser.visit(final_link)
+        #Now in new page
+        html=browser.html
+        new_soup=soup(html,'html.parser')
+        
+        result_downloads=new_soup.find("div",class_="downloads")
+        #print(result_downloads)
+        #url= result.find('a')['href'].text
+        sample_image=result_downloads.find('a')
+        final_url=sample_image['href']
+        #find_button.click()
+        #print(final_url)
+        
+        result_dict.update({'img_url':final_url})
+        result_dict.update({'title':title})
+        #print(result_dict)
+        hemisphere_image_urls.append(result_dict)
+        
+        return hemisphere_image_urls
+        
+    
         
 if __name__ == "__main__":
     # If running as script, print scraped data
