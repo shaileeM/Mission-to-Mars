@@ -22,6 +22,7 @@ def index():
 def scrape():
    mars = mongo.db.mars  #variable that points to our db
    mars_data = scraping.scrape_all()  #variable to hold newly scraped data
+   print(mars_data)
    mars.update({}, mars_data, upsert=True)  #update db using new data
    return redirect('/', code=302)
 

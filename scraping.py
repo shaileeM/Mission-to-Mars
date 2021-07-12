@@ -22,9 +22,7 @@ def scrape_all():
       "facts": mars_facts(),
       "last_modified": dt.datetime.now(),
       "hemis_url_title":hemis_url_title
-     
-     
-    }
+        }
     
     # Stop webdriver and return data
     browser.quit()
@@ -115,6 +113,7 @@ def hemis_data(browser):
     #list to hold image links and titles
     hemisphere_image_urls =[]
     result=hemis_soup.find_all("div",class_="item")
+    #print(result)
     
     for r in result:
         result_dict={}
@@ -149,7 +148,7 @@ def hemis_data(browser):
         #print(result_dict)
         hemisphere_image_urls.append(result_dict)
         
-        return hemisphere_image_urls
+    return hemisphere_image_urls
         
     
         
